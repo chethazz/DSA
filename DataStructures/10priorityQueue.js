@@ -1,4 +1,4 @@
-class Queue {
+class PriorityQueue {
     constructor() {
         this.items = [];
     }
@@ -19,7 +19,7 @@ class Queue {
     }
 
     dequeue() {
-        return this.items.shift();
+        return this.items.shift()
     }
 
     isEmpty() {
@@ -42,9 +42,11 @@ class Queue {
     }
 }
 
-const queue = new Queue();
-queue.enqueue(["Chethas", 10]);
-queue.enqueue(["Aron", 5]);
-queue.enqueue(["Rahul", 1]);
-queue.dequeue();
-queue.print();
+module.exports = PriorityQueue
+
+// const queue = new PriorityQueue();
+// queue.enqueue(["Chethas", 10]);
+// queue.enqueue(["Aron", 5]);
+// queue.enqueue(["Rahul", 1]);
+// queue.dequeue();
+// queue.print();
