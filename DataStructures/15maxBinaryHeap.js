@@ -49,9 +49,8 @@ class Heap {
         return maxValue;
     }
 
-    heapifyDown() {
-        let currentIndex = 0;
-
+    heapifyDown(fromIndex = 0) {
+        let currentIndex = fromIndex;
         while (this.data[this.getLeftChildIndex(currentIndex)] !== undefined) {
             let biggestChildIndex = this.getLeftChildIndex(currentIndex);
             const rightChildIndex = this.getRightChildIndex(currentIndex);
@@ -71,8 +70,25 @@ class Heap {
             }
         }
     }
-}
 
+    heapSort() {
+        const result = new Array(this.data.length);
+        const heapCopy = new Heap();
+        heapCopy.data = [...this.data];
+        while (heapCopy.data.length) {
+            result[heapCopy.data.length - 1] = heapCopy.poll();
+        }
+        return result;
+    }
+
+    heapify(arr) {
+        this.data = [...arr];
+        for (let i = Math.floor(arr.length / 2) - 1; i >= 0; i--) {
+            this.heapifyDown(i);
+        }
+        return this.data;
+    }
+}
 
 const heap = new Heap();
 console.log(heap);
@@ -84,4 +100,5 @@ heap.push(90);
 heap.push(44);
 heap.poll();
 
-console.log(heap.data.join(", "));
+console.log(heap.heapSort());
+console.log(heap.heapify([25, 5, 50, 70, 90, 44]));
