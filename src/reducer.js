@@ -1,9 +1,8 @@
+import { combineReducers } from "redux";
 import filtersReducer from "./features/filters/filtersSlice";
 import todosReducer from "./features/todoSlice";
 
-export default function rootReducer(state = {}, action) {
-	return {
-		todos: todosReducer(state.todos, action),
-		filters: filtersReducer(state.filters, action),
-	};
-}
+export const rootReducer = combineReducers({
+	todos: todosReducer,
+	filters: filtersReducer,
+});
