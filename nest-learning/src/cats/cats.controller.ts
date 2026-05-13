@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  ForbiddenException,
   Get,
   HttpException,
   HttpStatus,
@@ -49,6 +50,11 @@ export class CatsController {
         },
       );
     }
+  }
+
+  @Get('custom-exception')
+  throwCustomException() {
+    throw new ForbiddenException();
   }
 
   @Get(':id')
