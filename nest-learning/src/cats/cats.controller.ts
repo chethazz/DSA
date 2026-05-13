@@ -3,6 +3,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
+  HttpStatus,
   Param,
   Post,
   Put,
@@ -20,6 +22,33 @@ export class CatsController {
   @Get()
   findAll(@Query('age') age: number, @Query('breed') breed: string): string {
     return `This action returns all cats filtered by age: ${age} and breed: ${breed}`;
+  }
+
+  // By default build in exceptions like HttpException and those that inherit from this
+  // are not shown in console, as they are treated as a part of the application flow
+  // same applies to WsException and RpcException
+  @Get('error')
+  throwError() {
+    throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+  }
+
+  @Get('error/overidden')
+  async throwOveriddenError() {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+      await this.service.throwError();
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.FORBIDDEN,
+          error: 'This is a custom message',
+        },
+        HttpStatus.FORBIDDEN,
+        {
+          cause: error,
+        },
+      );
+    }
   }
 
   @Get(':id')
