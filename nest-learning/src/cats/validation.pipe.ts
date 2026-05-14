@@ -1,4 +1,10 @@
-import { ArgumentMetadata, Injectable, PipeTransform } from '@nestjs/common';
+import {
+  ArgumentMetadata,
+  BadRequestException,
+  Injectable,
+  PipeTransform,
+} from '@nestjs/common';
+import { z, type ZodSchema } from 'zod';
 
 @Injectable()
 export class ValidationPipe implements PipeTransform {
@@ -19,3 +25,16 @@ export class ValidationPipe implements PipeTransform {
 
 // Typescript interfaces disappear during transiplation, Thus if a method parameter's type is declared as an interface
 // instead of a class, the metatype value will be Object
+
+export class ZodValidationPipe implements PipeTransform {
+  constructor(private schema: ZodSchema) {}
+
+  transform(value: unknown, metadata: ArgumentMetadata) {
+    try {
+      const parsedValue = this.schema.parse(value);
+      return parsedValue;
+    } catch (error) {
+      throw new BadRequestException('Validation failed');
+    }
+  }
+}

@@ -5,8 +5,10 @@ import { Cat } from './interfaces/cat.interface';
 export class CatsService {
   private readonly cats: Cat[] = [];
 
-  create(cat: Cat) {
-    this.cats.push(cat);
+  async create(cat: Cat) {
+    await Promise.resolve();
+    console.log(cat);
+    return this.cats.push(cat);
   }
 
   findAll(): Cat[] {
@@ -18,6 +20,7 @@ export class CatsService {
   }
 
   async throwError() {
+    await Promise.resolve();
     throw new HttpException('Something', HttpStatus.FORBIDDEN);
   }
 }

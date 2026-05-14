@@ -12,18 +12,21 @@ import {
   Put,
   Query,
   UseFilters,
+  UsePipes,
 } from '@nestjs/common';
 import { CatsService } from './cats.service';
-import { CreateCatDto } from './dto/create-cat.dto';
+import { CreateCatDto, createCatSchema } from './dto/create-cat.dto';
 import { HttpExceptionFilter } from './http-exception.filter';
+import { ZodValidationPipe } from './validation.pipe';
 
 @Controller('cats')
 export class CatsController {
   constructor(private readonly catsService: CatsService) {}
 
   @Post()
-  create(@Body() createCatDto: CreateCatDto): string {
-    return `This creates a cat with ${createCatDto.name}, ${createCatDto.age}, ${createCatDto.breed}`;
+  @UsePipes(new ZodValidationPipe(createCatSchema))
+  async create(@Body() createCatDto: CreateCatDto) {
+    await this.catsService.create(createCatDto);
   }
 
   @Get()
