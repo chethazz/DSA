@@ -10,8 +10,10 @@ import {
   Post,
   Put,
   Query,
+  UseFilters,
 } from '@nestjs/common';
 import { CreateCatDto } from './dto/create-cat.dto';
+import { HttpExceptionFilter } from './http-exception.filter';
 
 @Controller('cats')
 export class CatsController {
@@ -33,30 +35,47 @@ export class CatsController {
     throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
   }
 
-  @Get('error/overidden')
-  async throwOveriddenError() {
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
-      await this.service.throwError();
-    } catch (error) {
-      throw new HttpException(
-        {
-          status: HttpStatus.FORBIDDEN,
-          error: 'This is a custom message',
-        },
-        HttpStatus.FORBIDDEN,
-        {
-          cause: error,
-        },
-      );
-    }
-  }
+  // @Get('error/overidden')
+  // async throwOveriddenError() {
+  //   try {
+  //     // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+  //     await this.service.throwError();
+  //   } catch (error) {
+  //     throw new HttpException(
+  //       {
+  //         status: HttpStatus.FORBIDDEN,
+  //         error: 'This is a custom message',
+  //       },
+  //       HttpStatus.FORBIDDEN,
+  //       {
+  //         cause: error,
+  //       },
+  //     );
+  //   }
+  // }
 
   @Get('custom-exception')
   throwCustomException() {
     throw new ForbiddenException();
   }
 
+  // Only if it's an instance of HttpException
+  @Get('custom-exception-filter')
+  @UseFilters(new HttpExceptionFilter())
+  throwCustomExceptionFilter() {
+    throw new ForbiddenException();
+  }
+
+  @Get('custom-filter-dependency-injection')
+  @UseFilters(HttpExceptionFilter)
+  throwCustomExceptionFilterWithDI() {
+    throw new ForbiddenException();
+  }
+
+  // Passing class instead of an instance. Framework handles the instantiation
+  // and enables Dependenancy Injection.
+  // Prefer applying filters by using class instead of instances. It reduces memory usage
+  // since nest can reuse instances of same class
   @Get(':id')
   findOne(@Param('id') id: string): string {
     console.log(id);
