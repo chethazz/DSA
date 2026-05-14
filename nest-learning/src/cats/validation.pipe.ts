@@ -4,7 +4,7 @@ import {
   Injectable,
   PipeTransform,
 } from '@nestjs/common';
-import { z, type ZodSchema } from 'zod';
+import { ZodType } from 'zod';
 
 @Injectable()
 export class ValidationPipe implements PipeTransform {
@@ -27,7 +27,7 @@ export class ValidationPipe implements PipeTransform {
 // instead of a class, the metatype value will be Object
 
 export class ZodValidationPipe implements PipeTransform {
-  constructor(private schema: ZodSchema) {}
+  constructor(private schema: ZodType) {}
 
   transform(value: unknown, metadata: ArgumentMetadata) {
     try {

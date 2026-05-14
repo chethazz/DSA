@@ -15,7 +15,7 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { CatsService } from './cats.service';
-import { CreateCatDto, createCatSchema } from './dto/create-cat.dto';
+import { CreateCatDto, createCatSchema } from './dto/zod.validation';
 import { HttpExceptionFilter } from './http-exception.filter';
 import { ZodValidationPipe } from './validation.pipe';
 
