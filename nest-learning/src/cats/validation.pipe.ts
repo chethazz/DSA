@@ -4,6 +4,8 @@ import {
   Injectable,
   PipeTransform,
 } from '@nestjs/common';
+import { plainToInstance } from 'class-transformer';
+import { validate } from 'class-validator';
 import { ZodType } from 'zod';
 
 @Injectable()
@@ -36,5 +38,33 @@ export class ZodValidationPipe implements PipeTransform {
     } catch (error) {
       throw new BadRequestException('Validation failed');
     }
+  }
+}
+
+// ValidationPipe class
+@Injectable()
+export class ValidationPipeClass implements PipeTransform<any> {
+  async transform(value: any, { metatype }: ArgumentMetadata) {
+    if (!metatype || !this.toValidate(metatype)) {
+      return value;
+    }
+
+    // Transforms our plain JavaScript argument object into a typed object so that we can apply validation
+    // Bc the incoming post body object, when deserialized from the network request, does not have any type information
+    const object = plainToInstance(metatype, value);
+
+    const errors = await validate(object);
+    if (errors.length > 0) {
+      throw new BadRequestException('Validation failed');
+    }
+    return value;
+  }
+
+  // Responsible for bypassing the validation step when the current argument being processed is
+  // a native JavaScript type (these can't have validation decorators attached, so there's no reason
+  // to run them through the validation step).
+  private toValidate(metatype: Function): boolean {
+    const types: Function[] = [String, Boolean, Number, Array, Object];
+    return !types.includes(metatype);
   }
 }

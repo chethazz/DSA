@@ -15,17 +15,27 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { CatsService } from './cats.service';
+import { CreateCatDtoClass } from './dto/create-cat.dto';
 import { CreateCatDto, createCatSchema } from './dto/zod.validation';
 import { HttpExceptionFilter } from './http-exception.filter';
-import { ZodValidationPipe } from './validation.pipe';
+import { ValidationPipeClass, ZodValidationPipe } from './validation.pipe';
 
 @Controller('cats')
 export class CatsController {
   constructor(private readonly catsService: CatsService) {}
 
+  // Method scoped pipe
   @Post()
   @UsePipes(new ZodValidationPipe(createCatSchema))
   async create(@Body() createCatDto: CreateCatDto) {
+    await this.catsService.create(createCatDto);
+  }
+
+  // Parameter scoped pipe
+  @Post('create-class')
+  async createWithClass(
+    @Body(new ValidationPipeClass()) createCatDto: CreateCatDtoClass,
+  ) {
     await this.catsService.create(createCatDto);
   }
 
