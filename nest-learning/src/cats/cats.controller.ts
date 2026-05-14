@@ -1,12 +1,14 @@
 import {
   Body,
   Controller,
+  DefaultValuePipe,
   Delete,
   ForbiddenException,
   Get,
   HttpException,
   HttpStatus,
   Param,
+  ParseBoolPipe,
   ParseIntPipe,
   Post,
   Put,
@@ -42,6 +44,15 @@ export class CatsController {
   @Get()
   findAll(@Query('age') age: number, @Query('breed') breed: string): string {
     return `This action returns all cats filtered by age: ${age} and breed: ${breed}`;
+  }
+
+  @Get('find-all')
+  async findAllDefault(
+    @Query('activeOnly', new DefaultValuePipe(false), ParseBoolPipe)
+    activeOnly: boolean,
+    @Query('page', new DefaultValuePipe(0), ParseIntPipe) page: number,
+  ) {
+    return await this.catsService.findAllDefault({ activeOnly, page });
   }
 
   // By default build in exceptions like HttpException and those that inherit from this

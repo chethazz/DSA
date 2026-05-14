@@ -15,6 +15,18 @@ export class CatsService {
     return this.cats;
   }
 
+  async findAllDefault({
+    activeOnly,
+    page,
+  }: {
+    activeOnly: boolean;
+    page: number;
+  }) {
+    await Promise.resolve();
+    console.log(activeOnly, page);
+    return this.cats;
+  }
+
   findOne(id: number): string {
     return `This returns a cat with #${id}`;
   }

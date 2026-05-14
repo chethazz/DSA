@@ -17,6 +17,16 @@ async function bootstrap() {
   const { httpAdapter } = app.get(HttpAdapterHost);
   app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
 
-  await app.listen(process.env.PORT ?? 3000);
+  // Global scoped pipe
+  // In the case of hybrid apps the useGlobalPipes() method doesn't set up pipes for gateways
+  // and microservices. For "standard" (non-hybrid) microservice apps, useGlobalPipes()
+  // does mount pipes globally.
+  // app.useGlobalPipes(new ValidationPipeClass());
+  // In terms of dependency injection, global pipes registered from outside of any module
+  // (with useGlobalPipes() as in the example above) cannot inject dependencies since the
+  // binding has been done outside the context of any module. In order to solve this issue
+  // use provider construction(check Providers in app.module.ts)
+
+  await app.listen(process.env.PORT ?? 3001);
 }
 bootstrap();
