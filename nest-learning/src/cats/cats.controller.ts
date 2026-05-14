@@ -7,16 +7,20 @@ import {
   HttpException,
   HttpStatus,
   Param,
+  ParseIntPipe,
   Post,
   Put,
   Query,
   UseFilters,
 } from '@nestjs/common';
+import { CatsService } from './cats.service';
 import { CreateCatDto } from './dto/create-cat.dto';
 import { HttpExceptionFilter } from './http-exception.filter';
 
 @Controller('cats')
 export class CatsController {
+  constructor(private readonly catsService: CatsService) {}
+
   @Post()
   create(@Body() createCatDto: CreateCatDto): string {
     return `This creates a cat with ${createCatDto.name}, ${createCatDto.age}, ${createCatDto.breed}`;
@@ -35,24 +39,23 @@ export class CatsController {
     throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
   }
 
-  // @Get('error/overidden')
-  // async throwOveriddenError() {
-  //   try {
-  //     // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
-  //     await this.service.throwError();
-  //   } catch (error) {
-  //     throw new HttpException(
-  //       {
-  //         status: HttpStatus.FORBIDDEN,
-  //         error: 'This is a custom message',
-  //       },
-  //       HttpStatus.FORBIDDEN,
-  //       {
-  //         cause: error,
-  //       },
-  //     );
-  //   }
-  // }
+  @Get('error/overidden')
+  async throwOveriddenError() {
+    try {
+      await this.catsService.throwError();
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.FORBIDDEN,
+          error: 'This is a custom message',
+        },
+        HttpStatus.FORBIDDEN,
+        {
+          cause: error,
+        },
+      );
+    }
+  }
 
   @Get('custom-exception')
   throwCustomException() {
@@ -77,9 +80,21 @@ export class CatsController {
   // Prefer applying filters by using class instead of instances. It reduces memory usage
   // since nest can reuse instances of same class
   @Get(':id')
-  findOne(@Param('id') id: string): string {
+  findOne(@Param('id', ParseIntPipe) id: number) {
     console.log(id);
     return `This action returns a #${id} cat`;
+  }
+
+  // We can instead pass in place instance, allowing us to customize it
+  @Get('in-place-instance/:id')
+  findOneInPlace(
+    @Param(
+      'id',
+      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),
+    )
+    id: number,
+  ) {
+    return this.catsService.findOne(id);
   }
 
   @Put(':id')
