@@ -14,8 +14,10 @@ import {
   Put,
   Query,
   UseFilters,
+  UseGuards,
   UsePipes,
 } from '@nestjs/common';
+import { RolesGuard } from '../auth/role.guard';
 import { CatsService } from './cats.service';
 import { CreateCatDtoClass } from './dto/create-cat.dto';
 import { CreateCatDto, createCatSchema } from './dto/zod.validation';
@@ -23,6 +25,8 @@ import { HttpExceptionFilter } from './http-exception.filter';
 import { ValidationPipeClass, ZodValidationPipe } from './validation.pipe';
 
 @Controller('cats')
+// Controller scoped guard.(Passing class instead of an instance - DI)
+@UseGuards(RolesGuard)
 export class CatsController {
   constructor(private readonly catsService: CatsService) {}
 

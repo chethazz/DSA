@@ -1,12 +1,13 @@
 import {
-  MiddlewareConsumer,
-  Module,
-  NestModule,
-  RequestMethod,
+    MiddlewareConsumer,
+    Module,
+    NestModule,
+    RequestMethod,
 } from '@nestjs/common';
-import { APP_FILTER, APP_PIPE } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_PIPE } from '@nestjs/core';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { RolesGuard } from './auth/role.guard';
 import { CatsController } from './cats/cats.controller';
 import { CatsModule } from './cats/cats.module';
 import { HttpExceptionFilter } from './cats/http-exception.filter';
@@ -20,8 +21,8 @@ import { LoggerMiddleware } from './middleware/logger.middleware';
   providers: [
     AppService,
     // Dependency Injection - global
-    // When using this approach to perform dependency injection for the pipe/filter, note that regardless
-    // of the module where this construction is employed, the pipe/filter is, in fact, global
+    // When using this approach to perform dependency injection for the pipe/filter/guard, note that regardless
+    // of the module where this construction is employed, the pipe/filter/guard is, in fact, global
     // Also useClass is not the only way of dealing with custom provider registration
     {
       provide: APP_FILTER,
@@ -30,6 +31,10 @@ import { LoggerMiddleware } from './middleware/logger.middleware';
     {
       provide: APP_PIPE,
       useClass: ValidationPipeClass,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
     },
   ],
 })

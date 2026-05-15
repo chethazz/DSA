@@ -27,6 +27,16 @@ async function bootstrap() {
   // binding has been done outside the context of any module. In order to solve this issue
   // use provider construction(check Providers in app.module.ts)
 
+  // Global scoped guard
+  // In the case of hybrid apps the useGlobalGuards() method doesn't set up guards for gateways
+  // and microservices by default (see Hybrid application for information on how to change this
+  // behavior). For "standard" (non-hybrid) microservice apps, useGlobalGuards() does mount the guards globally.
+  // app.useGlobalGuards(new RolesGuard());
+  // In terms of dependency injection, global guards registered from outside of any module (with
+  // useGlobalGuards() as in the example above) cannot inject dependencies since this is done outside
+  // the context of any module. In order to solve this issue,
+  // use provider construction(check Providers in app.module.ts)
+
   await app.listen(process.env.PORT ?? 3001);
 }
 bootstrap();
