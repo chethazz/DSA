@@ -18,6 +18,7 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { RolesGuard } from '../auth/role.guard';
+import { Roles } from '../auth/roles.decorator';
 import { CatsService } from './cats.service';
 import { CreateCatDtoClass } from './dto/create-cat.dto';
 import { CreateCatDto, createCatSchema } from './dto/zod.validation';
@@ -32,6 +33,7 @@ export class CatsController {
 
   // Method scoped pipe
   @Post()
+  @Roles(['admin'])
   @UsePipes(new ZodValidationPipe(createCatSchema))
   async create(@Body() createCatDto: CreateCatDto) {
     await this.catsService.create(createCatDto);
