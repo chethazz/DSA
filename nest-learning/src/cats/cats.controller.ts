@@ -26,11 +26,13 @@ import { CreateCatDto, createCatSchema } from './dto/zod.validation';
 import { HttpExceptionFilter } from './http-exception.filter';
 import { ValidationPipeClass, ZodValidationPipe } from './validation.pipe';
 import { LoggingInterceptor } from '../logging.interceptor';
+import { TransformInterceptor } from '../transform.interceptor';
+import { TimeoutInterceptor } from '../timeout.interceptor';
 
 @Controller('cats')
 // Controller scoped guard/interceptor.(Passing class instead of an instance - DI)
 @UseGuards(RolesGuard)
-@UseInterceptors(LoggingInterceptor)
+@UseInterceptors(LoggingInterceptor, TransformInterceptor, TimeoutInterceptor)
 export class CatsController {
   constructor(private readonly catsService: CatsService) {}
 
