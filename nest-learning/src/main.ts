@@ -37,6 +37,8 @@ async function bootstrap() {
   // the context of any module. In order to solve this issue,
   // use provider construction(check Providers in app.module.ts)
 
+  // app.useGlobalInterceptors(new LoggingInterceptor());
+
   await app.listen(process.env.PORT ?? 3001);
 }
 bootstrap();

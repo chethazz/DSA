@@ -1,10 +1,10 @@
 import {
-    MiddlewareConsumer,
-    Module,
-    NestModule,
-    RequestMethod,
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
 } from '@nestjs/common';
-import { APP_FILTER, APP_GUARD, APP_PIPE } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { RolesGuard } from './auth/role.guard';
@@ -12,6 +12,7 @@ import { CatsController } from './cats/cats.controller';
 import { CatsModule } from './cats/cats.module';
 import { HttpExceptionFilter } from './cats/http-exception.filter';
 import { ValidationPipeClass } from './cats/validation.pipe';
+import { LoggingInterceptor } from './logging.interceptor';
 import { logger } from './middleware/logger.(functional).middleware';
 import { LoggerMiddleware } from './middleware/logger.middleware';
 
@@ -35,6 +36,10 @@ import { LoggerMiddleware } from './middleware/logger.middleware';
     {
       provide: APP_GUARD,
       useClass: RolesGuard,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggingInterceptor,
     },
   ],
 })
