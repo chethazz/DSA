@@ -51,4 +51,15 @@ export class ModuleRefService implements OnModuleInit {
   //   const contextId = ContextIdFactory.create();
   //   this.moduleRef.registerRequestByContextId(RequestObject, contextId);
   // }
+
+  async handleIncomingRequestContext(request: Record<string, unknown>) {
+    const contextId = ContextIdFactory.getByRequest(request);
+
+    const requestScopedCatsService = await this.moduleRef.resolve(
+      CatsService,
+      contextId,
+    );
+
+    return requestScopedCatsService;
+  }
 }
