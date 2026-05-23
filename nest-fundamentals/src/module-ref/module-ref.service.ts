@@ -2,11 +2,13 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ContextIdFactory, ModuleRef } from '@nestjs/core';
 import { CatsService } from '../cats/cats.service';
 import { CommonService } from '../common/common.service';
+import { ModuleFactory } from './module.factory';
 
 @Injectable()
 export class ModuleRefService implements OnModuleInit {
   private service: CommonService;
   private transientService: CatsService;
+  private moduleFactory: ModuleFactory;
   constructor(private moduleRef: ModuleRef) {}
 
   onModuleInit() {
@@ -61,5 +63,11 @@ export class ModuleRefService implements OnModuleInit {
     );
 
     return requestScopedCatsService;
+  }
+
+  // To dynamically instantiate a class that wasn't previously registered as a provider, use module reference's create() method
+  // This technique enables us to conditionally instantiate different classes outside framework container
+  async customClassesDyn() {
+    this.moduleFactory = await this.moduleRef.create(ModuleFactory);
   }
 }
