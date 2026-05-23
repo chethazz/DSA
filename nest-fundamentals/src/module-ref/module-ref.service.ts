@@ -43,4 +43,12 @@ export class ModuleRefService implements OnModuleInit {
     ]);
     console.log(transientServices[0] === transientServices[1]); // true
   }
+
+  // Manually generated context identifiers (with ContextIdFactory.create()) represent DI sub-trees in which
+  // REQUEST provider is undefined as they are not instantiated and managed by the Nest dependency injection system.
+  // To register a custom REQUEST object for manually created DI subtree, use ModuleRef#registerRequestByContextId() method
+  // async onModuleInitSingleWithReq() {
+  //   const contextId = ContextIdFactory.create();
+  //   this.moduleRef.registerRequestByContextId(RequestObject, contextId);
+  // }
 }
