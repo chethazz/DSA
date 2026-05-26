@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { CatsModule } from './cats/cats.module';
+import { CatsService } from './cats/cats.service';
 import { CommonService } from './common/common.service';
 import { ConfigModule } from './config/config.module';
+import { HelloService } from './hello.service';
 import { LazyService } from './lazy/lazy.service';
 import { ModuleRefService } from './module-ref/module-ref.service';
-import { HelloService } from './hello.service';
-import { CatsService } from './cats/cats.service';
-import { CatsModule } from './cats/cats.module';
 
 @Module({
   imports: [

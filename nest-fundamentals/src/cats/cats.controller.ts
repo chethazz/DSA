@@ -1,4 +1,4 @@
-import { Body, Controller, Post, SetMetadata, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { Roles } from '../decorators/roles.decorator';
 import { RolesGuard } from '../guards/roles.guard';
 import { CatsService } from './cats.service';
