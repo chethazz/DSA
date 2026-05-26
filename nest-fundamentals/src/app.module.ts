@@ -7,6 +7,7 @@ import { CommonService } from './common/common.service';
 import { ConfigModule } from './config/config.module';
 import { HelloService } from './hello.service';
 import { LazyService } from './lazy/lazy.service';
+import { LifecycleService } from './lifecycle/lifecycle.service';
 import { ModuleRefService } from './module-ref/module-ref.service';
 
 @Module({
@@ -23,6 +24,7 @@ import { ModuleRefService } from './module-ref/module-ref.service';
     LazyService,
     HelloService,
     CatsService,
+    LifecycleService,
   ],
 })
 export class AppModule {}
