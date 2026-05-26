@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DiscoveryService } from '@nestjs/core';
+import { DiscoveryFlag } from '../decorators/discovery.decorator';
 
 @Injectable()
 export class ExampleService {
@@ -14,5 +15,17 @@ export class ExampleService {
   getAllControllers() {
     const controllers = this.discoveryService.getControllers();
     console.log(controllers);
+  }
+
+  getMetadata() {
+    const controllers = this.discoveryService.getControllers();
+
+    const [controller] = controllers.filter(
+      (item) =>
+        this.discoveryService.getMetadataByDecorator(DiscoveryFlag, item) ===
+        'experimental',
+    );
+
+    console.log(controller);
   }
 }

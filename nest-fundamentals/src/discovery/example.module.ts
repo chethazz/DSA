@@ -9,5 +9,6 @@ import { ExampleService } from './example.service';
 @Module({
   imports: [DiscoveryModule],
   providers: [ExampleService],
+  exports: [ExampleService],
 })
 export class ExampleModule {}
