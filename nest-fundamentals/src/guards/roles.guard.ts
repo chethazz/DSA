@@ -9,7 +9,9 @@ export class RolesGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
   canActivate(context: ExecutionContext) {
-    const roles = this.reflector.get(Roles, context.getHandler());
+    const roles = [
+      ...(this.reflector.get<string[]>('roles', context.getHandler()) ?? []),
+    ];
 
     // If our intent is to specify 'user' as the default role, and override it selectively\
     // for certain methods, we use the getAllAndOverride() method.
