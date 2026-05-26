@@ -4,6 +4,7 @@ import { CatsService } from './cats.service';
 import { CreateCatDtoClass } from './dto/create-cat.dto';
 import { RolesGuard } from '../guards/roles.guard';
 
+@Roles(['user'])
 @Controller('cats')
 export class CatsController {
   constructor(private readonly catsService: CatsService) {}
@@ -11,7 +12,7 @@ export class CatsController {
   @Post()
   @UseGuards(RolesGuard)
   // Sets metadata role to ['user']
-  @Roles(['user'])
+  @Roles(['admin'])
   async create(@Body() createCatDto: CreateCatDtoClass) {
     await this.catsService.create(createCatDto);
   }
