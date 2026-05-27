@@ -1,5 +1,11 @@
 import { Controller } from '@nestjs/common';
-import { EventPattern, MessagePattern } from '@nestjs/microservices';
+import {
+  Ctx,
+  EventPattern,
+  MessagePattern,
+  NatsContext,
+  Payload,
+} from '@nestjs/microservices';
 import { from, Observable } from 'rxjs';
 
 @Controller('math')
@@ -31,5 +37,12 @@ export class MathController {
   async handleUserCreated(data: Record<string, unknown>) {
     console.log(data);
     return await Promise.resolve('User created');
+  }
+
+  // Acessing additional request details
+  @MessagePattern('time.us.*')
+  getDate(@Payload() data: number[], @Ctx() context: NatsContext) {
+    console.log(`Subject: ${context.getSubject()}`);
+    return new Date().toLocaleTimeString();
   }
 }
