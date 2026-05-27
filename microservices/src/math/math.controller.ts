@@ -1,5 +1,5 @@
 import { Controller } from '@nestjs/common';
-import { MessagePattern } from '@nestjs/microservices';
+import { EventPattern, MessagePattern } from '@nestjs/microservices';
 import { from, Observable } from 'rxjs';
 
 @Controller('math')
@@ -24,5 +24,12 @@ export class MathController {
   @MessagePattern({ cmd: 'sumObs' })
   accumulateObs(data: number[]): Observable<number> {
     return from(data);
+  }
+
+  // To crete an event hadler, use @EventPattern() decorator
+  @EventPattern('math_user_created')
+  async handleUserCreated(data: Record<string, unknown>) {
+    console.log(data);
+    return await Promise.resolve('User created');
   }
 }
