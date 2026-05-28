@@ -14,7 +14,7 @@ import {
   Payload,
   Transport,
 } from '@nestjs/microservices';
-import { from, Observable } from 'rxjs';
+import { from, lastValueFrom, Observable } from 'rxjs';
 
 @Controller('math')
 export class MathController {
@@ -66,11 +66,22 @@ export class MathController {
   }
 
   @Get('send-message')
-  sendMessage() {
+  async sendMessage() {
     const pattern = { cmd: 'send-message' };
     const payload = [1, 2, 3];
 
-    return this.client.send<number>(pattern, payload);
+    const res = await lastValueFrom(this.client.emit<number>(pattern, payload));
+
+    return res;
+  }
+
+  @Get('send-event')
+  async sendEvent() {
+    const payload = { name: 'regulus', age: '20' };
+    const res = await lastValueFrom(
+      this.client.emit<number>('send-message', payload),
+    );
+    return res;
   }
 }
 
