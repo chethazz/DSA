@@ -12,6 +12,7 @@ import {
   MessagePattern,
   NatsContext,
   Payload,
+  Server,
   Transport,
 } from '@nestjs/microservices';
 import { from, lastValueFrom, Observable } from 'rxjs';
@@ -107,6 +108,9 @@ export class MathControllerOnBootstrap implements OnApplicationBootstrap {
     this.client.on('error' as any, (err) => {
       console.error(err);
     });
+
+    // Access underlying driver instance.(Try to avoid this at)
+    const netServer = this.client.unwrap<Server>();
     try {
       await this.client.connect();
       console.log('Successfully connected to the microservice');

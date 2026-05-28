@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import {
   MicroserviceOptions,
+  Server,
   TcpEvents,
   Transport,
 } from '@nestjs/microservices';
@@ -23,6 +24,9 @@ async function bootstrap() {
   app.on<TcpEvents>('error', (err) => {
     console.error(err);
   });
+
+  // Access server's underlying driver instance
+  const netServer = app.unwrap<Server>();
 
   await app.listen();
 }
