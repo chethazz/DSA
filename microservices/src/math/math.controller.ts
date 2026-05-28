@@ -102,6 +102,11 @@ export class MathControllerOnBootstrap implements OnApplicationBootstrap {
     this.client.status.subscribe((status) => {
       console.log(status);
     });
+
+    // Listen to internal events emitted by microservice.(error event for example)
+    this.client.on('error' as any, (err) => {
+      console.error(err);
+    });
     try {
       await this.client.connect();
       console.log('Successfully connected to the microservice');
