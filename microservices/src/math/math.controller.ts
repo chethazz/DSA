@@ -1,4 +1,9 @@
-import { Controller, Inject, OnApplicationBootstrap } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Inject,
+  OnApplicationBootstrap,
+} from '@nestjs/common';
 import {
   Client,
   ClientProxy,
@@ -58,6 +63,14 @@ export class MathController {
   getDate(@Payload() data: number[], @Ctx() context: NatsContext) {
     console.log(`Subject: ${context.getSubject()}`);
     return new Date().toLocaleTimeString();
+  }
+
+  @Get('send-message')
+  sendMessage() {
+    const pattern = { cmd: 'send-message' };
+    const payload = [1, 2, 3];
+
+    return this.client.send<number>(pattern, payload);
   }
 }
 
