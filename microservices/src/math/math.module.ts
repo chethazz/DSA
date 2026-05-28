@@ -14,6 +14,13 @@ import { ConfigService } from '../config/config.service';
       {
         name: 'MATH_SERVICE',
         transport: Transport.TCP,
+        options: {
+          // For a client to communicate securely over TLS, we define tlsOption object with the CA certificate.
+          // This is the certificate of authority that signed the server's certificate.
+          tlsOptions: {
+            ca: 'Some CA key',
+          },
+        },
       },
     ]),
 

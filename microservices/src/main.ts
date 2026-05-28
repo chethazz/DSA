@@ -12,6 +12,16 @@ async function bootstrap() {
     AppModule,
     {
       transport: Transport.TCP,
+      // When communicating outside of a private network, it's important to encrypt traffic to ensure security.
+      // In NestJS, it can be achieved with TLS over TCP.
+      // To enable TLS for a TCP server, we need both a private key and a certificate in PEM format.
+      // These are added to the server's options by setting the tlsOptions
+      options: {
+        tlsOptions: {
+          key: 'Some key',
+          cert: 'Certificate',
+        },
+      },
     },
   );
 
