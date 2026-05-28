@@ -1,6 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import {
   MicroserviceOptions,
+  RedisEvents,
+  RedisStatus,
   Server,
   TcpEvents,
   Transport,
@@ -24,12 +26,12 @@ async function bootstrap() {
   );
 
   // Subscribing to server's status
-  app.status.subscribe((status) => {
+  app.status.subscribe((status: RedisStatus) => {
     console.log(status);
   });
 
   // Listening to internal events of server
-  app.on<TcpEvents>('error', (err) => {
+  app.on<RedisEvents>('error', (err) => {
     console.error(err);
   });
 
