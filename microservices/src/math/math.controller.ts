@@ -1,15 +1,29 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Inject, OnApplicationBootstrap } from '@nestjs/common';
 import {
+  Client,
+  ClientProxy,
   Ctx,
   EventPattern,
   MessagePattern,
   NatsContext,
   Payload,
+  Transport,
 } from '@nestjs/microservices';
 import { from, Observable } from 'rxjs';
 
 @Controller('math')
 export class MathController {
+  constructor(@Inject('MATH_SERVICE') private client: ClientProxy) {}
+
+  // Configuring transporter directly -> Not preferred technique since it's harder to test and share a client instance.
+  // @Client({
+  //   transport: Transport.TCP,
+  //   options: {
+  //     host: '127.0.0.1',
+  //     port: 3000,
+  //   },
+  // })
+
   // To create a message handler based on req-res paradigm, use @MessagePattern() decorator.
   // It should only be within a controller as they serve as the entry point for the app
 
@@ -44,5 +58,27 @@ export class MathController {
   getDate(@Payload() data: number[], @Ctx() context: NatsContext) {
     console.log(`Subject: ${context.getSubject()}`);
     return new Date().toLocaleTimeString();
+  }
+}
+
+// The ClientProxy is lazy. It doesn't initiate a connection immediately. Instead, it will be
+// established before the first microservice call, and then reused across each subsequent call.
+// However, if you want to delay the application bootstrapping process until a connection is established,
+// you can manually initiate a connection using the ClientProxy object's connect() method inside the
+// OnApplicationBootstrap lifecycle hook.
+// @Controller('math')
+export class MathControllerOnBootstrap implements OnApplicationBootstrap {
+  @Client({
+    transport: Transport.TCP,
+    options: { host: 'Some host', port: 3000 },
+  })
+  private client: ClientProxy;
+  async onApplicationBootstrap() {
+    try {
+      await this.client.connect();
+      console.log('Successfully connected to the microservice');
+    } catch (error) {
+      console.error(error);
+    }
   }
 }
