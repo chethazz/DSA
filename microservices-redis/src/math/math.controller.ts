@@ -25,6 +25,11 @@ export class MathController implements OnApplicationBootstrap {
     this.client.on('error', (err) => {
       console.error(err);
     });
+
+    // For more advanced use cases, we may need to acess the underlying driver instance. This can be useful for scenarios like
+    // manually closing the connection or using driver-specific methods.(Avoid this)
+    const [pub, sub] =
+      this.client.unwrap<[import('ioredis').Redis, import('ioredis').Redis]>();
   }
 
   // In complex scenarios, we may need to access additional information about the incoming request.

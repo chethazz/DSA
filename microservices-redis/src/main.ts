@@ -36,7 +36,8 @@ async function bootstrap() {
   });
 
   // Access server's underlying driver instance
-  const netServer = app.unwrap<Server>();
+  const [pub, sub] =
+    app.unwrap<[import('ioredis').Redis, import('ioredis').Redis]>();
 
   await app.listen();
 }
