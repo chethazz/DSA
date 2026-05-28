@@ -2,6 +2,7 @@ import { Controller, Inject } from '@nestjs/common';
 import {
   ClientProxy,
   Ctx,
+  EventPattern,
   MessagePattern,
   Payload,
   RedisContext,
@@ -15,6 +16,16 @@ export class MathController {
   // When using redis transporter, we can access RedisContext object
   @MessagePattern('notifications')
   getNotifications(@Payload() data: number[], @Ctx() context: RedisContext) {
+    console.log(context.getChannel());
+  }
+
+  // After enabling wildcards option in main.ts, we can use wildcards in our message and event patterns. For eg: to subscribe to
+  // all channels starting with notifications, we can use following pattern.
+  @EventPattern('notifications.*')
+  handleWildcardNotifications(
+    @Payload() data: any,
+    @Ctx() context: RedisContext,
+  ) {
     console.log(context.getChannel());
   }
 }
