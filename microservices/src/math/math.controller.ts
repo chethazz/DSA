@@ -15,7 +15,7 @@ import {
   Server,
   Transport,
 } from '@nestjs/microservices';
-import { from, lastValueFrom, Observable } from 'rxjs';
+import { from, lastValueFrom, Observable, timeout } from 'rxjs';
 
 @Controller('math')
 export class MathController {
@@ -111,6 +111,12 @@ export class MathControllerOnBootstrap implements OnApplicationBootstrap {
 
     // Access underlying driver instance.(Try to avoid this at)
     const netServer = this.client.unwrap<Server>();
+
+    // Handle timeout
+    this.client
+      .send<number, number[]>('some-pattern', [1, 2, 3])
+      .pipe(timeout(5000));
+
     try {
       await this.client.connect();
       console.log('Successfully connected to the microservice');
