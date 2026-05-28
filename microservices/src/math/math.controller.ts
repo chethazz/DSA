@@ -98,6 +98,10 @@ export class MathControllerOnBootstrap implements OnApplicationBootstrap {
   })
   private client: ClientProxy;
   async onApplicationBootstrap() {
+    // Getting real-time updates on connection and state of the underlying driver instance
+    this.client.status.subscribe((status) => {
+      console.log(status);
+    });
     try {
       await this.client.connect();
       console.log('Successfully connected to the microservice');
