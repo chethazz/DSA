@@ -1,13 +1,16 @@
 import { NestFactory } from '@nestjs/core';
 import {
+  AsyncMicroserviceOptions,
   MicroserviceOptions,
   Server,
   TcpEvents,
   Transport,
 } from '@nestjs/microservices';
 import { AppModule } from './app.module';
+import { ConfigService } from './config/config.service';
 
 async function bootstrap() {
+  // use AsyncMicroserviceOptions to use useFactory and dynamic microservice configuration
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
     AppModule,
     {
@@ -22,6 +25,13 @@ async function bootstrap() {
           cert: 'Certificate',
         },
       },
+      // useFactory: (configService: ConfigService) => ({
+      //   transport: Transport.TCP,
+      //   options: {
+      //     host: configService.get<string>('HOST'),
+      //     port: configService.get<number>('PORT'),
+      //   },
+      // }),
     },
   );
 
