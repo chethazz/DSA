@@ -2,9 +2,15 @@ import Head from "next/head";
 import { useState } from "react";
 
 import dynamic from "next/dynamic";
+import { Inter } from "next/font/google";
 import Image from "next/image";
 import { countries } from "../countries";
 import styles from "../styles/Home.module.css";
+
+const inter = Inter({
+	subsets: ["latin"],
+	display: "swap",
+});
 
 export default function Start({ countries }) {
 	const [results, setResults] = useState(countries);
@@ -23,10 +29,6 @@ export default function Start({ countries }) {
 				<title>Core Web Vitals</title>
 				<meta name="description" content="Core web vitals walk through" />
 				<link rel="icon" href="/favicon.ico" />
-				<link
-					href="https://fonts.googleapis.com/css2?family=Inter"
-					rel="stylesheet"
-				/>
 			</Head>
 
 			<main className={styles.container}>
