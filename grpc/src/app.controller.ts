@@ -1,12 +1,8 @@
+import { Metadata } from '@grpc/grpc-js';
 import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+import type { Hero, HeroesService } from './hero/hero';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
-
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
-  }
+  constructor(private readonly heroesService: HeroesService) {}
 }
