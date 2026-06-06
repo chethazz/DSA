@@ -1,3 +1,4 @@
+import { ReflectionService } from '@grpc/reflection';
 import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { join } from 'path';
@@ -12,6 +13,9 @@ async function bootstrap() {
       options: {
         package: 'hero',
         protoPath: join(__dirname, 'hero/hero.proto'),
+        onLoadPackageDefinition: (pkg, server) => {
+          new ReflectionService(pkg).addToServer(server);
+        },
       },
     },
   );
