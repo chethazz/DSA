@@ -1,8 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import type { ClientGrpc } from '@nestjs/microservices';
+import { Hero, HeroesService } from './hero/hero';
 
 @Injectable()
-export class AppService {
-  getHello(): string {
-    return 'Hello World!';
+export class AppService implements OnModuleInit {
+  private heroesService: HeroesService;
+
+  constructor(@Inject('HERO_PACKAGE') private client: ClientGrpc) {}
+
+  onModuleInit() {
+    this.heroesService = this.client.getService<HeroesService>('HeroesService');
+  }
+
+  async getHello(): Promise<Hero> {
+    return this.heroesService.FindOne({ id: 1 });
   }
 }
