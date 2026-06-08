@@ -59,6 +59,12 @@ export class HelloController {
       console.log(message);
     });
 
+    // Access metadata
+    requestStream.on('metadata', (metadata: Metadata) => {
+      const meta = metadata.get('X-Meta');
+      console.log(meta);
+    });
+
     requestStream.on('end', () => callback(null, { reply: 'Hello world!' }));
   }
 }

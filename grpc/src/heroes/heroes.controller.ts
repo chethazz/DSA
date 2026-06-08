@@ -16,10 +16,15 @@ export class HeroesController implements OnModuleInit {
     metadata: Metadata,
     call: ServerUnaryCall<any, any>,
   ): Hero | undefined {
+    const serverMetadata = new Metadata();
     const items = [
       { id: 1, name: 'John' },
       { id: 2, name: 'Doe' },
     ];
+
+    serverMetadata.add('Set-Cookie', 'yummy_cookie=choco');
+    call.sendMetadata(serverMetadata);
+
     return items.find(({ id }) => id === data.id);
   }
 
