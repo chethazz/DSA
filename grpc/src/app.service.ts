@@ -2,6 +2,9 @@ import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { Client, Transport, type ClientGrpc } from '@nestjs/microservices';
 import { join } from 'path';
 import { Hero, HeroesService } from './hero/hero';
+import { ReplaySubject } from 'rxjs';
+import { HelloRequest } from './hello/hello';
+import { HelloService } from './hello/hello.service';
 
 @Injectable()
 export class AppService implements OnModuleInit {
