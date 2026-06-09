@@ -35,14 +35,16 @@ export class UsersService implements OnModuleInit {
     return { users: this.users };
   }
 
-  findOne(id: string): User | undefined {
-    return this.users.find((user) => user.id === id);
+  findOne(id: string): User {
+    const user = this.users.find((user) => user.id === id);
+    if (!user) throw new NotFoundException(`User not found by id ${id}`);
+    return user;
   }
 
   update(id: string, updateUserDto: UpdateUserDto): User {
     const userIndex = this.users.findIndex((user) => user.id === id);
 
-    if (userIndex !== 1) {
+    if (userIndex !== -1) {
       this.users[userIndex] = {
         ...this.users[userIndex],
         ...updateUserDto,
