@@ -1,6 +1,13 @@
-import { CreateUserDto, UpdateUserDto, User, Users } from '@app/common';
+import {
+  CreateUserDto,
+  PaginationDto,
+  UpdateUserDto,
+  User,
+  Users,
+} from '@app/common';
 import { Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
 import { randomUUID } from 'crypto';
+import { Observable, Subject } from 'rxjs';
 
 @Injectable()
 export class UsersService implements OnModuleInit {
@@ -55,5 +62,29 @@ export class UsersService implements OnModuleInit {
     }
 
     throw new NotFoundException(`User not found by id ${id}`);
+  }
+
+  queryUsers(
+    paginationDtoStream: Observable<PaginationDto>,
+  ): Observable<Users> {
+    // subject is a reference to the stream that we are returning and allows us to attach functionality to both when caller
+    // calls the stream and when it completes.
+    const subject = new Subject<Users>();
+
+    const onNext = (paginationDto: PaginationDto) => {
+      const start = paginationDto.page * paginationDto.skip;
+      subject.next({
+        users: this.users.slice(start, start + paginationDto.skip),
+      });
+    };
+
+    const onComplete = () => subject.complete();
+
+    paginationDtoStream.subscribe({
+      next: onNext,
+      complete: onComplete,
+    });
+
+    return subject.asObservable();
   }
 }
