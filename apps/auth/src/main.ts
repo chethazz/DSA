@@ -1,8 +1,21 @@
+import { AUTH } from '@app/common';
 import { NestFactory } from '@nestjs/core';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { join } from 'path';
 import { AuthModule } from './auth.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AuthModule);
-  await app.listen(process.env.port ?? 3001);
+  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
+    AuthModule,
+    {
+      transport: Transport.GRPC,
+      options: {
+        protoPath: join(__dirname, '../auth.proto'),
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        package: AUTH,
+      },
+    },
+  );
+  await app.listen();
 }
 bootstrap();
