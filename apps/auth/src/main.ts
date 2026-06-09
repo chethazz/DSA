@@ -11,7 +11,6 @@ async function bootstrap() {
       transport: Transport.GRPC,
       options: {
         protoPath: join(__dirname, '../auth.proto'),
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         package: AUTH,
       },
     },

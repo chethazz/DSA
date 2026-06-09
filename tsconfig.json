@@ -23,7 +23,7 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@app/common": [
-        "libs/common/src"
+        "libs/common/src/index.ts"
       ],
       "@app/common/*": [
         "libs/common/src/*"
