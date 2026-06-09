@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package auth;
 
-service UserService {
+service UsersService {
   rpc CreateUser (CreateUserDto) returns (User) {}
   rpc FindAllUsers (Empty) returns (Users) {}
   rpc FindOneUser (FindOneUserDto) returns (User) {}
