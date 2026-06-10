@@ -3,11 +3,15 @@ import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import App from "./App.jsx";
 import "./index.css";
+import store from "./store.js";
+import { fetchTodos } from "./features/todos/todosSlice.js";
+
+store.dispatch(fetchTodos())
 
 createRoot(document.getElementById("root")).render(
 	<StrictMode>
-		
-			<App />
-	
+		<Provider store={store}>
+		<App />
+		</Provider>
 	</StrictMode>,
 );

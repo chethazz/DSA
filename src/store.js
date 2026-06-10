@@ -1,19 +1,13 @@
-import { create } from "zustand";
+import { configureStore } from "@reduxjs/toolkit";
+import "./api/server";
+import filtersReducer from "./features/filters/filtersSlice";
+import todosReducer from "./features/todos/todosSlice";
 
-export const useCounterStore = create((set) => ({
-    count: 0,
-    increment: () => set((state) => ({count: state.count + 1})),
-    decrement: () => set((state) => ({count: state.count - 1})),
-    incrementAsync: async () => {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        set((state) => ({count: state.count + 1}))
+const store = configureStore({
+    reducer: {
+        todos: todosReducer,
+        filters: filtersReducer
     }
-}))
+})
 
-
-export const useBear = create((set) => ({
-	bears: 0,
-	increasePopulation: () => set((state) => ({ bears: state.bears + 1 })),
-	removeAllBears: () => set({ bears: 0 }),
-	updateBears: (newBears) => set({ bears: newBears }),
-}));
+export default store;
