@@ -5,6 +5,7 @@ import {
   HttpStatus,
   NotImplementedException,
   Post,
+  Request,
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
@@ -17,8 +18,8 @@ export class PassportAuthController {
   @HttpCode(HttpStatus.OK)
   @Post('login')
   @UseGuards(PassportLocalGuard)
-  login() {
-    return 'success';
+  login(@Request() req) {
+    return this.authService.signIn(req.user);
   }
 
   @Get('me')
